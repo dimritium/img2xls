@@ -23,6 +23,7 @@ def populateXls( pixels, size ):
     for row in range(rows):
         xls_row = row*3
         for col in range(cols):
+            # print (xls_row,)
             r, g, b = pixels[row, col]
             cell_format = wb.add_format()
             
@@ -32,10 +33,12 @@ def populateXls( pixels, size ):
             cell_format.set_bg_color(rgb_v)
             ws.write(xls_row,     col, r, cell_format)
 
+            cell_format = wb.add_format()             
             rgb_v = RGB(0, g, 0)
             cell_format.set_bg_color(rgb_v)
             ws.write(xls_row + 1, col, g, cell_format)
 
+            cell_format = wb.add_format()
             rgb_v = RGB(0, 0, b)
             cell_format.set_bg_color(rgb_v)
             ws.write(xls_row + 2, col, b, cell_format)
