@@ -16,6 +16,11 @@ def getImageDetails( img ):
 def RGB(r, g, b):
     return '#{:02x}{:02x}{:02x}'.format(r, g, b)
 
+def populateCell(wb, ws, rgb_v, xls_row, col, col_v):
+    cell_format = wb.add_format()
+    cell_format.set_bg_color(rgb_v)
+    ws.write(xls_row, col, col_v, cell_format)    
+
 def populateXls( pixels, size ):
     rows, cols = size
     wb = xlsxwriter.Workbook('Img2Xls.xlsx')
@@ -23,25 +28,17 @@ def populateXls( pixels, size ):
     for row in range(rows):
         xls_row = row*3
         for col in range(cols):
-            # print (xls_row,)
-            r, g, b = pixels[row, col]
-            cell_format = wb.add_format()
-            
-            rgb_v = RGB(r, 0, 0)
-            if( row == 0 and col == 0):
-                print (rgb_v)
-            cell_format.set_bg_color(rgb_v)
-            ws.write(xls_row,     col, r, cell_format)
+            lis_rgb = pixels[row, col]
 
-            cell_format = wb.add_format()             
-            rgb_v = RGB(0, g, 0)
-            cell_format.set_bg_color(rgb_v)
-            ws.write(xls_row + 1, col, g, cell_format)
-
-            cell_format = wb.add_format()
-            rgb_v = RGB(0, 0, b)
-            cell_format.set_bg_color(rgb_v)
-            ws.write(xls_row + 2, col, b, cell_format)
+            for i in range (3):
+                if i == 0:
+                    rgb_v = RGB(lis_rgb[0], 0, 0)
+                elif i == 1:
+                    rgb_v = RGB(0, lis_rgb[1], 0)
+                else:
+                    rgb_v = RGB(0, 0, lis_rgb[2])
+                
+                populateCell(wb, ws, rgb_v, xls_row + i, col, lis_rgb[i])
     wb.close()
 
 if __name__ == "__main__":
